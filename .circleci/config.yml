@@ -35,10 +35,7 @@ jobs:
       - workflow/call-workflow:
           org-or-user: "RHEMS-Japan"
           repo: "blue-mole-deploy"
-          # param: |
-          #   {
-          #     "${CIRCLE_BRANCH}-blue-mole": true
-          #   }
+          param: { "${CIRCLE_BRANCH}-blue-mole": true }
       - workflow/commit-filter:
           target-list: "alpha,master"
           stop-no-target: true
