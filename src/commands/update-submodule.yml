@@ -17,7 +17,7 @@ steps:
   - run:
       name: update submodule
       command: |
-        echo "target submodule: << parameters.module-name >>"
+        echo "target submodule: \<< parameters.module-name >>"
         git config --global user.email "submodule.updater@rhems-japan.co.jp"
         git config --global user.name "submodule-updater"
         git submodule update --init --remote --recursive << parameters.module-name >
