@@ -15,7 +15,8 @@ parameters:
     description: ""
   param:
     type: string
-    default: '{ "run-integration-tests": true }'
+    default: |
+      { "run-integration-tests": true }
     description: ""
 
 steps:
