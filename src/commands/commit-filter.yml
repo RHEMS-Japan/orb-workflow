@@ -20,6 +20,7 @@ steps:
         match=$(echo "${commit_subject}" | sed -rn "/.*\[${reg}\].*/p")
         echo ${match}
         if << parameters.stop-no-target >> && [ -z "${match}" ]; then
+          echo "stop job"
           circleci-agent step halt
         fi
         echo "export TARGET=`echo ${match} | sed -e 's/\[//' -e 's/\]//'`" >> $BASH_ENV
