@@ -3,7 +3,7 @@ description: >
 # What will this command do?
 # Descriptions should be short, simple, and clear.
 parameters:
-  org-or-username:
+  org-or-user:
     type: string
     description: ""
   repo:
@@ -12,13 +12,30 @@ parameters:
   token:
     type: env_var_name
     default: CIRCLE_API_TOKEN
+    description: ""
+  param:
+    type: string
+    default: |
+      {
+        "run-integration-tests": true,
+        "dev-orb-version": "dev:${CIRCLE_SHA1:0:7}"
+      }
+    description: ""
 
 steps:
   - run:
+      name: set params
+      command: |
+        param=$(eval echo << parameters.param >>)
+        json='{\"branch\": \"$CIRCLE_BRANCH\", \"parameters\": $param}'
+        eval echo $json > pipelineparams.json
+        cat pipelineparams.json
+  - run:
       name: trigger workflow
       command: |
+        token=$(eval echo "$<< parameters.token >>")
         curl --request POST \
-        --url https://circleci.com/api/v2/project/github/<< parameters.org-or-username >>/<< parameters.repo >>/pipeline \
+        --url https://circleci.com/api/v2/project/github/<< parameters.org-or-user >>/<< parameters.repo >>/pipeline \
         --header "Circle-Token: ${PERSONAL_API_TOKEN}" \
         --header "content-type: application/json" \
-        --data '{ "branch": "'${CIRCLE_BRANCH}'", "parameters": { "'${CIRCLE_BRANCH}'-'${WORKFLOW}'": true } }'
+        --data @pipelineparams.json
