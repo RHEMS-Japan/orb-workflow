@@ -15,9 +15,11 @@ steps:
       fingerprints:
         - << parameters.fingerprint >>
   - run:
+      name: confirm
+      command: echo << parameters.module-name >>
+  - run:
       name: update submodule
       command: |
-        echo << parameters.module-name >>
         git config --global user.email "submodule.updater@rhems-japan.co.jp"
         git config --global user.name "submodule-updater"
         git submodule update --init --remote --recursive << parameters.module-name >
