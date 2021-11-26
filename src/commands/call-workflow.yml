@@ -25,9 +25,7 @@ steps:
       name: set params
       command: |
         param=$(eval echo $PARAM_MAP)
-        echo $param
         json='{\"branch\": \"$CIRCLE_BRANCH\", \"parameters\": $param}'
-        echo $json
         eval echo $json > pipelineparams.json
         cat pipelineparams.json
       environment:
