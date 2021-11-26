@@ -71,6 +71,9 @@ workflows:
           context: orb-publishing
           requires:
             - orb-tools/publish-dev
+      - run: 
+          name: confirm json
+          command: cat pipelineparams.json
 
   # This `integration-test_deploy` workflow will only run
   # when the run-integration-tests pipeline parameter is set to true.
