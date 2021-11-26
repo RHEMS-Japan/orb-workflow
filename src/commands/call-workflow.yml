@@ -16,8 +16,8 @@ parameters:
   param:
     type: string
     default: >-
-      {"run-integration-tests": true, "dev-orb-version":
-      "dev:${CIRCLE_SHA1:0:7}"}
+      {\"run-integration-tests\": true, \"dev-orb-version\":
+      \"dev:${CIRCLE_SHA1:0:7}\"}
     description: ""
 
 steps:
