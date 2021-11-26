@@ -24,12 +24,14 @@ steps:
   - run:
       name: set params
       command: |
-        param=$(eval echo << parameters.param >>)
+        param=$(eval echo $PARAM_MAP)
         echo $param
         json='{\"branch\": \"$CIRCLE_BRANCH\", \"parameters\": $param}'
         echo $json
         eval echo $json > pipelineparams.json
         cat pipelineparams.json
+      environment:
+        PARAM_MAP: << parameters.param >>
   - run:
       name: trigger workflow
       command: |
