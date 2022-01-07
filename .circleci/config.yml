@@ -34,7 +34,7 @@ jobs:
       # Push new changes first, before adding new tests to your config.
       - workflow/update-submodule:
           module-name: orbs-workflow-subm
-      #    submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+          submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
       # - workflow/commit-filter:
       #     target-list: "alpha,master"
       #     stop-no-target: true
