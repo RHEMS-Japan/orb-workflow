@@ -19,27 +19,36 @@ parameters:
 
 steps:
   - run:
+      name: set env
+      command: |
+        echo "export SUBMODULE_FINGERPRINT=`eval echo << parameters.submodule-fingerprint >>`" >> $BASH_ENV
+        echo "export MASTER_FINGERPRINT=`eval echo << parameters.master-fingerprint >>`" >> $BASH_ENV
+  - run:
       name: confirm
-      command: echo << parameters.module-name >>
+      command: |
+        echo ${SUBMODULE_FINGERPRINT}
+        echo ${MASTER_FINGERPRINT}
   - add_ssh_keys:
       fingerprints:
-        - << parameters.submodule-fingerprint >>
-        - << parameters.master-fingerprint >>
+        - ${SUBMODULE_FINGERPRINT}
+        - ${MASTER_FINGERPRINT}
   - run:
       name: update submodule
       command: |
         if [ -n << parameters.module-name >> ]; then
           module_name=$(eval echo << parameters.module-name >>)
-          commit_message=$(echo << parameters.commit-message >>)
+          commit_message=$(eval echo << parameters.commit-message >>)
 
-          _key=$(echo << parameters.submodule-fingerprint >> | sed -e 's/://g')
+          ls ~/.ssh/
+
+          _key=$(echo ${SUBMODULE_FINGERPRINT} | sed -e 's/://g')
           export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
           git config --global user.email "submodule.updater@rhems-japan.co.jp"
           git config --global user.name "submodule-updater"
           git submodule update --init --remote --recursive << parameters.module-name >>
           git status
 
-          _key=$(echo << parameters.master-fingerprint >> | sed -e 's/://g')
+          _key=$(echo ${MASTER_FINGERPRINT} | sed -e 's/://g')
           export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
 
           git commit -a -m "${commit_message}" || true
