@@ -32,12 +32,12 @@ jobs:
       # "greet" is a sample command packaged with this orb config.
       # This sample integration test will run as long as the greet command exists. Once you remove the greet command you should remove this line.
       # Push new changes first, before adding new tests to your config.
-      - workflow/update-submodule:
-          module-name: orbs-workflow-subm
-          # orbs-workflow-subm
-          submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
-          # orbs-workflow
-          master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
+      # - workflow/update-submodule:
+      #     module-name: orbs-workflow-subm
+      #     # orbs-workflow-subm
+      #     submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+      #     # orbs-workflow
+      #     master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
       # - workflow/commit-filter:
       #     target-list: "alpha,master"
       #     stop-no-target: true
