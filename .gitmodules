@@ -1,0 +1,3 @@
+[submodule "orbs-workflow-subm"]
+	path = orbs-workflow-subm
+	url = git@github.com:RHEMS-Japan/orbs-workflow-subm.git
