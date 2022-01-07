@@ -8,10 +8,10 @@ parameters:
     description: "Submodule name to be updated."
   submodule-fingerprint:
     type: string
-    description: ""
+    description: "Fingerprint with read access to the submodule repository to be updated."
   master-fingerprint:
     type: string
-    description: ""
+    description: "fingerprint with write access to push changes in the submodule to the repository."
   commit-message:
     type: string
     default: "[skip ci] update submodule"
