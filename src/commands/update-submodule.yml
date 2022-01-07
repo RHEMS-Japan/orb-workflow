@@ -18,13 +18,16 @@ steps:
   - run:
       name: confirm
       command: echo << parameters.module-name >>
+  - add_ssh_keys:
+      fingerprints:
+        - << parameters.submodule-fingerprint >>
   - run:
       name: confirm
       command: |
         echo << parameters.submodule-fingerprint >>
         ls ~/.ssh/
         _key=$(echo << parameters.submodule-fingerprint >> | sed -e 's/://g')
-        export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${key}"
+        export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
         echo $GIT_SSH_COMMAND
 
   # - run:
