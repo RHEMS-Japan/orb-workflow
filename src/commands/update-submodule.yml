@@ -22,9 +22,10 @@ steps:
       name: confirm
       command: |
         echo << parameters.submodule-fingerprint >>
-        cat ~/.ssh/
-        echo << parameters.submodule-fingerprint >> | sed -e 's/://g'
-      # export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_12d1254452bda7f998b2799e7cd2a679"
+        ls ~/.ssh/
+        _key=$(echo << parameters.submodule-fingerprint >> | sed -e 's/://g')
+        export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${key}"
+        echo $GIT_SSH_COMMAND
 
   # - run:
   #     name: update submodule
