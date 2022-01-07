@@ -6,6 +6,9 @@ parameters:
   module-name:
     type: string
     description: "Submodule name to be updated."
+  submodule-fingerprint:
+    type: string
+    description: ""
   commit-message:
     type: string
     default: "[skip ci] update submodule"
