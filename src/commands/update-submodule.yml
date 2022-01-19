@@ -33,7 +33,7 @@ steps:
       name: check branch name
       command: |
         _branch=$(eval echo << parameters.master-branch >>)
-        if [ -z ${_branch} ];
+        if [ -z ${_branch} ]; then
           echo "Specify the branch name to push with parameters: master-branch."
         fi
         echo "export CIRCLE_BRANCH=${_branch}" >> $BASH_ENV
