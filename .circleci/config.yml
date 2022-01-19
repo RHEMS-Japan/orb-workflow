@@ -110,5 +110,7 @@ workflows:
     jobs:
       - integration-test-1:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^test\/.*/
