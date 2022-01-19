@@ -49,10 +49,10 @@ steps:
           git config --global user.email "submodule.updater@rhems-japan.co.jp"
           git config --global user.name "submodule-updater"
 
-          git checkout ${CIRCLE_BRANCH}
-
           git submodule update --init --remote --recursive << parameters.module-name >>
           git status
+
+          git checkout ${CIRCLE_BRANCH}
 
           _key=$(echo << parameters.master-fingerprint >> | sed -e 's/://g')
           export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
