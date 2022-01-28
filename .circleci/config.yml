@@ -26,7 +26,8 @@ jobs:
   # Define one or more jobs which will utilize your orb's commands and parameters to validate your changes.
   integration-test-1:
     docker:
-      - image: circleci/php:7.3.12-cli-stretch-node-browsers
+      - image: cimg/base:stable
+      # - image: circleci/php:7.3.12-cli-stretch-node-browsers
     steps:
       - checkout
       # "greet" is a sample command packaged with this orb config.
@@ -71,7 +72,7 @@ workflows:
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - orb-tools/lint # Lint Yaml files
+      # - orb-tools/lint # Lint Yaml files
       - orb-tools/pack # Pack orb source
       - shellcheck/check:
           dir: ./src/scripts
@@ -84,7 +85,7 @@ workflows:
           orb-name: rhems-japan/workflow
           context: orb-publishing # A restricted context containing your private publishing credentials. Will only execute if approved by an authorized user.
           requires:
-            - orb-tools/lint
+            # - orb-tools/lint
             - orb-tools/pack
             - bats/run
             - shellcheck/check
