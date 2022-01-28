@@ -49,8 +49,7 @@ jobs:
       #       { \"${CIRCLE_BRANCH}-blue-mole\": true }
   integration-test-2:
     docker:
-      - image: ubuntu-1604:202104-01
-      # - image: cimg/base:stable
+      - image: cimg/base:stable
     steps:
       - checkout
       - run: sleep 30
