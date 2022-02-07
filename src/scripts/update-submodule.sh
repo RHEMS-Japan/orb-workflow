@@ -1,3 +1,16 @@
+function check_exists_branch() {
+  # params:
+  #   $1 = repository url
+  #   $2 = branch name
+  branches=($(git ls-remote -h $1 | sed 's?.*refs/heads/??'))
+  for branch in ${branches[@]}; do
+    if [ $branch = $2 ]; then
+      return 0
+    fi
+  done
+  return -1
+}
+
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message=$(eval echo ${COMMIT_MESSAGE})
@@ -14,45 +27,50 @@ if [ -n ${MODULE_NAME} ]; then
 
   # .gitmodulesが存在したら
   if [ -e ".gitmodules" ]; then
-      echo -e "already exists .gitmodule\n"
-      # pathsにpathを全て取り込む
-      paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}' ))
-      # 指定のモジュール名が存在するか
-      branch_name=""
-      if [[ $paths =~ $module_name ]]; then
-          # 指定のモジュール名のpathが何行目か
-          N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
-          # 指定のモジュールのブランチ名の取得
-          branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
-          echo $branch_name
-          # 現在のブランチ名と異なったら
-          if [ $branch_name != ${CIRCLE_BRANCH} ]; then
-              # 一旦deinitして設定し直す
-              git submodule deinit -f $module_name
-              git rm -f $module_name
-              git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
-          fi
-      else
-        echo -e "no setting in .gitmodule\n"
-        git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+    echo -e "already exists .gitmodule\n"
+    # pathsにpathを全て取り込む
+    paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}' ))
+    # 指定のモジュール名が存在するか
+    branch_name=""
+    if [[ $paths =~ $module_name ]]; then
+      # 指定のモジュール名のpathが何行目か
+      N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
+      # 指定のモジュールのブランチ名の取得
+      branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
+      echo $branch_name
+      # 現在のブランチ名と異なったら
+      if [ $branch_name != ${CIRCLE_BRANCH} ]; then
+          # 一旦deinitして設定し直す
+          git submodule deinit -f $module_name
+          git rm -f $module_name
+          git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
       fi
+    else
+      echo -e "no setting in .gitmodule\n"
+      git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+    fi
   # .gitmodulesが存在しなかったら
   else
     echo -e "no exists .gitmodule\n"
     git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
-  git submodule sync
-  git submodule update --init --remote --recursive ${module_name}
-  git status
+  if [ check_exists_branch ${submodule_url} ${CIRCLE_BRANCH} ]; then
+    git submodule sync
+    git submodule update --init --remote --recursive ${module_name}
+    git status
 
-  git checkout ${CIRCLE_BRANCH}
-  _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
-  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
-  git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
-  git pull
-  git commit -a -m "${commit_message}" || true
-  git push -u origin ${CIRCLE_BRANCH}
+    git checkout ${CIRCLE_BRANCH}
+    _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
+    export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+    git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
+    git pull
+    git commit -a -m "${commit_message}" || true
+    git push -u origin ${CIRCLE_BRANCH}
   else
+    echo -e "The branch specified in submodule does not exist.\n"
+  fi
+
+else
   echo "target not found."
 fi
