@@ -1,3 +1,9 @@
+function check_for_module() {
+  if [ -e ".git/modules/$1" ]; then
+      return true
+  fi
+}
+
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
@@ -7,16 +13,19 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.email "submodule.updater@rhems-japan.co.jp"
   git config --global user.name "submodule-updater"
 
-  git submodule update --init --remote --recursive ${module_name}
-  git status
+  if(check_for_module ${MODULE_NAME}); then
+    git submodule update --init --remote --recursive ${module_name}
+    git status
 
-  git checkout ${CIRCLE_BRANCH}
-  _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
-  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
-  git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
-  git pull
-  git commit -a -m "${commit_message}" || true
-  git push -u origin ${CIRCLE_BRANCH}
+    git checkout ${CIRCLE_BRANCH}
+    _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
+    export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+    git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
+    git pull
+    git commit -a -m "${commit_message}" || true
+    git push -u origin ${CIRCLE_BRANCH}
+  fi
+
   else
   echo "target not found."
 fi
