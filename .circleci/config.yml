@@ -35,6 +35,7 @@ jobs:
           master-branch: alpha
           # orbs-workflow
           master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
+          commit-message: "[test]"
       # - workflow/commit-filter:
       #     target-list: "alpha,master"
       #     stop-no-target: true
