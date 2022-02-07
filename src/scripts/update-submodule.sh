@@ -6,7 +6,11 @@ function check_for_module() {
 
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
-  commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
+
+  commit_message=$(eval echo ${COMMIT_MESSAGE})
+  if [ "${commit_message}" = "[skip ci] update submodule" ]; then
+    commit_message="${commit_message}: ${module_name}"
+  fi
 
   _key=$(echo ${SUBM_FINGER_PRINT} | sed -e 's/://g')
   export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
