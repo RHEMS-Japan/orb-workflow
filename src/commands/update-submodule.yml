@@ -48,4 +48,3 @@ steps:
         MASTER_FINGER_PRINT: << parameters.master-fingerprint >>
         SUBM_FINGER_PRINT: << parameters.submodule-fingerprint >>
       command: << include(scripts/update-submodule.sh) >>
-
