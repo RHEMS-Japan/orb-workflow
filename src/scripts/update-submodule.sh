@@ -1,4 +1,5 @@
 function check_exists_branch() {
+  echo "check_exists_branch() loaded."
   # params:
   #   $1 = repository url
   #   $2 = branch name
