@@ -12,6 +12,8 @@ function check_for_module() {
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
+  reponame=$(echo $CIRCLE_REPOSITORY_URL | awk -F "/" '{ print $NF }' | awk -F "." '{ print $(NF-1) }')
+  submodule_url=$(echo ${CIRCLE_REPOSITORY_URL} | sed "s/${reponame}/${module_name}/")
 
   _key=$(echo ${SUBM_FINGER_PRINT} | sed -e 's/://g')
   export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
@@ -22,8 +24,8 @@ if [ -n ${MODULE_NAME} ]; then
     echo -e "[OK] Settings already exist in module.\n"
   else
     echo -e "[NG] No setting in module.\n"
-    echo "git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${module_name}"
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${module_name}
+
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
   git submodule update --init --remote --recursive ${module_name}
