@@ -1,16 +1,16 @@
-function check_exists_branch() {
-  echo "check_exists_branch() loaded."
-  # params:
-  #   $1 = repository url
-  #   $2 = branch name
-  branches=($(git ls-remote -h $1 | sed 's?.*refs/heads/??'))
-  for branch in ${branches[@]}; do
-    if [ $branch = $2 ]; then
-      return 0
-    fi
-  done
-  return -1
-}
+# function check_exists_branch() {
+#   echo "check_exists_branch() loaded."
+#   # params:
+#   #   $1 = repository url
+#   #   $2 = branch name
+#   branches=($(git ls-remote -h $1 | sed 's?.*refs/heads/??'))
+#   for branch in ${branches[@]}; do
+#     if [ $branch = $2 ]; then
+#       return 0
+#     fi
+#   done
+#   return -1
+# }
 
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
@@ -56,7 +56,13 @@ if [ -n ${MODULE_NAME} ]; then
     # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
-  check_result=$(check_exists_branch ${submodule_url} ${CIRCLE_BRANCH})
+  check_result=false
+  branches=($(git ls-remote -h ${submodule_url} | sed 's?.*refs/heads/??'))
+  for branch in ${branches[@]}; do
+    if [ $branch = ${CIRCLE_BRANCH} ]; then
+      check_result=true
+    fi
+  done
   if [ $check_result ]; then
     git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
     git submodule sync
