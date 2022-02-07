@@ -1,6 +1,9 @@
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
-  commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
+  commit_message=$(eval echo ${COMMIT_MESSAGE})
+  if [ "${commit_message}" = "[skip ci] update submodule" ]; then
+    commit_message="${commit_message}: ${module_name}"
+  fi
   reponame=$(echo $CIRCLE_REPOSITORY_URL | awk -F "/" '{ print $NF }' | awk -F "." '{ print $(NF-1) }')
   submodule_url=$(echo ${CIRCLE_REPOSITORY_URL} | sed "s/${reponame}/${module_name}/")
 
