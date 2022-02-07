@@ -22,6 +22,7 @@ if [ -n ${MODULE_NAME} ]; then
     echo -e "[OK] Settings already exist in module.\n"
   else
     echo -e "[NG] No setting in module.\n"
+    echo "git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${module_name}"
     git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${module_name}
   fi
 
