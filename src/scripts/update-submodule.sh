@@ -1,5 +1,6 @@
 function check_for_module() {
-  ls .git/modules/
+  pwd
+  ls .git
   if [ -e ".git/modules/$1" ]; then
       return true
   fi
