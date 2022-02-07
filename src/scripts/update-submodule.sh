@@ -14,9 +14,9 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.name "submodule-updater"
 
   if(check_for_module ${MODULE_NAME}); then
-    echo "[OK] Settings already exist in module."
+    echo -e "[OK] Settings already exist in module.\n"
   else
-    echo "[NG] No setting in module."
+    echo -e "[NG] No setting in module.\n"
     git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${MODULE_NAME}
   fi
 
