@@ -14,18 +14,22 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.name "submodule-updater"
 
   if(check_for_module ${MODULE_NAME}); then
-    git submodule update --init --remote --recursive ${module_name}
-    git status
-
-    git checkout ${CIRCLE_BRANCH}
-    _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
-    export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
-    git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
-    git pull
-    git commit -a -m "${commit_message}" || true
-    git push -u origin ${CIRCLE_BRANCH}
+    echo "[OK] Settings already exist in module."
+  else
+    echo "[NG] No setting in module."
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${MODULE_NAME}
   fi
 
+  git submodule update --init --remote --recursive ${module_name}
+  git status
+
+  git checkout ${CIRCLE_BRANCH}
+  _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
+  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+  git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
+  git pull
+  git commit -a -m "${commit_message}" || true
+  git push -u origin ${CIRCLE_BRANCH}
   else
   echo "target not found."
 fi
