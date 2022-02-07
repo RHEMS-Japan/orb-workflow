@@ -56,29 +56,29 @@ if [ -n ${MODULE_NAME} ]; then
     # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
-  check_result=false
-  branches=($(git ls-remote -h ${submodule_url} | sed 's?.*refs/heads/??'))
-  for branch in ${branches[@]}; do
-    if [ $branch = ${CIRCLE_BRANCH} ]; then
-      check_result=true
-    fi
-  done
-  if [ $check_result ]; then
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
-    git submodule sync
-    git submodule update --init --remote --recursive ${module_name}
-    git status
+  # check_result=false
+  # branches=($(git ls-remote -h ${submodule_url} | sed 's?.*refs/heads/??'))
+  # for branch in ${branches[@]}; do
+  #   if [ $branch = ${CIRCLE_BRANCH} ]; then
+  #     check_result=true
+  #   fi
+  # done
+  # if [ $check_result ]; then
+  git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+  git submodule sync
+  git submodule update --init --remote --recursive ${module_name}
+  git status
 
-    git checkout ${CIRCLE_BRANCH}
-    _key=$(echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
-    export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
-    git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
-    git pull
-    git commit -a -m "${commit_message}" || true
-    git push -u origin ${CIRCLE_BRANCH}
-  else
-    echo -e "The branch specified in submodule does not exist.\n"
-  fi
+  git checkout ${CIRCLE_BRANCH}
+  _key=$(eval echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
+  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+  git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
+  git pull
+  git commit -a -m "${commit_message}" || true
+  git push -u origin ${CIRCLE_BRANCH}
+  # else
+  #   echo -e "The branch specified in submodule does not exist.\n"
+  # fi
 
 else
   echo "target not found."
