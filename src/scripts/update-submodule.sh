@@ -18,11 +18,11 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.email "submodule.updater@rhems-japan.co.jp"
   git config --global user.name "submodule-updater"
 
-  if(check_for_module ${MODULE_NAME}); then
+  if(check_for_module ${module_name}); then
     echo -e "[OK] Settings already exist in module.\n"
   else
     echo -e "[NG] No setting in module.\n"
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${MODULE_NAME}
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${module_name}
   fi
 
   git submodule update --init --remote --recursive ${module_name}
