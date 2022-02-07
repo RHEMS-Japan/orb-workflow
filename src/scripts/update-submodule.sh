@@ -8,6 +8,7 @@ function check_for_module() {
   fi
 }
 
+
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
