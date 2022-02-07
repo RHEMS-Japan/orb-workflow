@@ -43,19 +43,20 @@ if [ -n ${MODULE_NAME} ]; then
           # 一旦deinitして設定し直す
           git submodule deinit -f $module_name
           git rm -f $module_name
-          git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+          # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
       fi
     else
       echo -e "no setting in .gitmodule\n"
-      git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+      # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
     fi
   # .gitmodulesが存在しなかったら
   else
     echo -e "no exists .gitmodule\n"
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+    # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
   if [ check_exists_branch ${submodule_url} ${CIRCLE_BRANCH} ]; then
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
     git submodule sync
     git submodule update --init --remote --recursive ${module_name}
     git status
