@@ -23,15 +23,11 @@ parameters:
     default: "dev:alpha"
 
 jobs:
-  # Define one or more jobs which will utilize your orb's commands and parameters to validate your changes.
   integration-test-1:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      # "greet" is a sample command packaged with this orb config.
-      # This sample integration test will run as long as the greet command exists. Once you remove the greet command you should remove this line.
-      # Push new changes first, before adding new tests to your config.
       - workflow/update-submodule:
           module-name: orbs-workflow-subm
           # orbs-workflow-subm
@@ -39,6 +35,7 @@ jobs:
           master-branch: alpha
           # orbs-workflow
           master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
+          commit-message: "[test]"
       # - workflow/commit-filter:
       #     target-list: "alpha,master"
       #     stop-no-target: true
@@ -47,18 +44,30 @@ jobs:
       #     repo: "blue-mole-deploy"
       #     param: |
       #       { \"${CIRCLE_BRANCH}-blue-mole\": true }
+  trigger-tag-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run: echo "export CIRCLE_BRANCH=alpha" >>"$BASH_ENV"
+      - workflow/update-submodule:
+          module-name: orbs-workflow-subm
+          # orbs-workflow-subm
+          submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+          master-branch: alpha
+          # orbs-workflow
+          master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
+
 
 workflows:
-  # Prior to producing a development orb (which requires credentials) basic validation, linting, and even unit testing can be performed.
-  # This workflow will run on every commit
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - orb-tools/lint # Lint Yaml files
+      # - orb-tools/lint # Lint Yaml files
       - orb-tools/pack # Pack orb source
-      - shellcheck/check:
-          dir: ./src/scripts
-          exclude: SC2148
+      # - shellcheck/check:
+      #     dir: ./src/scripts
+      #     exclude: SC2148
       # optional: Run BATS tests against your scripts
       - bats/run:
           path: ./src/tests
@@ -67,33 +76,20 @@ workflows:
           orb-name: rhems-japan/workflow
           context: orb-publishing # A restricted context containing your private publishing credentials. Will only execute if approved by an authorized user.
           requires:
-            - orb-tools/lint
+            # - orb-tools/lint
             - orb-tools/pack
             - bats/run
-            - shellcheck/check
-      # Trigger an integration workflow to test the
-      # dev:${CIRCLE_SHA1:0:7} version of your orb
+            # - shellcheck/check
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
           context: orb-publishing
           requires:
             - orb-tools/publish-dev
 
-  # This `integration-test_deploy` workflow will only run
-  # when the run-integration-tests pipeline parameter is set to true.
-  # It is meant to be triggered by the "trigger-integration-tests-workflow"
-  # job, and run tests on <your orb>@dev:${CIRCLE_SHA1:0:7}.
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      # Run any integration tests defined within the `jobs` key.
       - integration-test-1
-      # Publish a semver version of the orb. relies on
-      # the commit subject containing the text "[semver:patch|minor|major|skip]"
-      # as that will determine whether a patch, minor or major
-      # version will be published or if publishing should
-      # be skipped.
-      # e.g. [semver:patch] will cause a patch version to be published.
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: rhems-japan/workflow
           context: orb-publishing
@@ -109,7 +105,7 @@ workflows:
                 - main
   tag-test:
     jobs:
-      - integration-test-1:
+      - trigger-tag-test:
           filters:
             branches:
               ignore: /.*/
