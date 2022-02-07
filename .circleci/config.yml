@@ -30,6 +30,7 @@ jobs:
       - checkout
       - workflow/update-submodule:
           module-name: orbs-workflow-subm
+          master-branch: alpha
           # orbs-workflow-subm
           submodule-fingerprint: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
           # orbs-workflow

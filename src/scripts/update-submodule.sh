@@ -29,6 +29,8 @@ if [ -n ${MODULE_NAME} ]; then
   # .gitmodulesが存在したら
   if [ -e ".gitmodules" ]; then
     echo -e "already exists .gitmodule\n"
+    git submodule update --init --remote --recursive ${module_name}
+    
     # pathsにpathを全て取り込む
     paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}' ))
     # 指定のモジュール名が存在するか
