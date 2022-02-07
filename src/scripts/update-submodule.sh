@@ -55,7 +55,8 @@ if [ -n ${MODULE_NAME} ]; then
     # git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
   fi
 
-  if [[ check_exists_branch ${submodule_url} ${CIRCLE_BRANCH} ]]; then
+  check_result=check_exists_branch ${submodule_url} ${CIRCLE_BRANCH}
+  if [ $check_result ]; then
     git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
     git submodule sync
     git submodule update --init --remote --recursive ${module_name}
