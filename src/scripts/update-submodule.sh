@@ -1,13 +1,3 @@
-function check_for_module() {
-  pwd
-  ls .git
-  if [ -e ".git/modules/$1" ]; then
-      return true
-  else
-      return false
-  fi
-}
-
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message="$(eval echo ${COMMIT_MESSAGE}): ${module_name}"
@@ -19,13 +9,7 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.email "submodule.updater@rhems-japan.co.jp"
   git config --global user.name "submodule-updater"
 
-  if(check_for_module ${module_name}); then
-    echo -e "[OK] Settings already exist in module.\n"
-  else
-    echo -e "[NG] No setting in module.\n"
-
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
-  fi
+  git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
 
   git submodule update --init --remote --recursive ${module_name}
   git status
