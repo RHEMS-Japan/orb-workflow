@@ -9,8 +9,36 @@ if [ -n ${MODULE_NAME} ]; then
   git config --global user.email "submodule.updater@rhems-japan.co.jp"
   git config --global user.name "submodule-updater"
 
-  git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+  # .gitmodulesが存在したら
+  if [ -e ".gitmodules" ]; then
+      echo -e "already exists .gitmodule\n"
+      # pathsにpathを全て取り込む
+      paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}' ))
+      # 指定のモジュール名が存在するか
+      branch_name=""
+      if [[ $paths =~ $module_name ]]; then
+          echo $module_name
+          # 指定のモジュール名のpathが何行目か
+          N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
+          echo $N
+          # 指定のモジュールのブランチ名の取得
+          branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
+          echo $branch_name
+      fi
+      # 現在のブランチ名と異なったら
+      if [ $branch_name != ${CIRCLE_BRANCH} ]; then
+        # 一旦deinitして設定し直す
+        git submodule deinit $module_name
+        git rm $module_name
+        git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+      fi
+  # .gitmodulesが存在しなかったら
+  else
+    echo -e "no exists .gitmodule\n"
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+  fi
 
+  git submodule sync
   git submodule update --init --remote --recursive ${module_name}
   git status
 
