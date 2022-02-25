@@ -39,11 +39,12 @@ jobs:
       # - workflow/commit-filter:
       #     target-list: "alpha,master"
       #     stop-no-target: true
-      # - workflow/call-workflow:
-      #     org-or-user: "RHEMS-Japan"
-      #     repo: "blue-mole-deploy"
-      #     param: |
-      #       { \"${CIRCLE_BRANCH}-blue-mole\": true }
+      - workflow/call-workflow:
+          org-or-user: "RHEMS-Japan"
+          repo: "blue-mole-deploy"
+          # branch: test
+          param: |
+            { \"${CIRCLE_BRANCH}-blue-mole\": true }
   trigger-tag-test:
     docker:
       - image: cimg/base:stable
