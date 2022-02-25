@@ -10,8 +10,8 @@ parameters:
     type: string
     description: "Your GitHub repository name."
   branch:
-    type: env_var_name
-    default: CIRCLE_BRANCH
+    type: string
+    default: $CIRCLE_BRANCH
     description: "The branch name of the workflow to trigger."
   token:
     type: env_var_name
@@ -28,7 +28,7 @@ steps:
   - run:
       name: set params
       command: |
-        branch=$(eval echo "$<< parameters.branch >>")
+        branch=$(eval echo "<< parameters.branch >>")
         param=$(eval echo $PARAM_MAP)
 
         json='{\"branch\": \"$branch\", \"parameters\": $param}'
