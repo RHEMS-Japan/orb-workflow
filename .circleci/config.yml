@@ -50,7 +50,7 @@ jobs:
       - checkout
       - run:
           name: sleep
-          command: sleep 2
+          command: sleep 3
       - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
