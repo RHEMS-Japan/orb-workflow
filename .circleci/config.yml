@@ -21,30 +21,57 @@ parameters:
       A "dev:alpha" version must exist for the initial pipeline run.
     type: string
     default: "dev:alpha"
+  finger-master:
+    type: string
+    default: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
+  finger-subm:
+    type: string
+    default: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+  finger-subm2:
+    type: string
+    default: 8d:d0:ec:10:8c:ca:a7:14:50:82:87:02:88:4c:c2:15
 
 jobs:
+  update-submodules-1:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - workflow/update-submodule:
+          module-name: orbs-workflow-subm
+          submodule-fingerprint: << pipeline.parameters.finger-subm >>
+          master-branch: alpha
+          master-fingerprint: << pipeline.parameters.finger-master >>
+
+  update-submodules-2:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: sleep
+          command: sleep 1
+      - workflow/update-submodule:
+          module-name: -orbs-workflow-subm-2
+          submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
+          master-branch: main
+          master-fingerprint: << pipeline.parameters.finger-master >>
+
   integration-test-1:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run: echo "export SUBM_KEY=89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d" >> $BASH_ENV
-      - workflow/update-submodule:
-          module-name: orbs-workflow-subm
-          # orbs-workflow-subm
-          submodule-fingerprint: ${SUBM_KEY}
-          master-branch: alpha
-          # orbs-workflow
-          master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
-      # - workflow/commit-filter:
-      #     target-list: "alpha,master"
-      #     stop-no-target: true
-      # - workflow/call-workflow:
-      #     org-or-user: "RHEMS-Japan"
-      #     repo: "blue-mole-deploy"
-      #     # branch: test
-      #     param: |
-      #       { \"${CIRCLE_BRANCH}-blue-mole\": true }
+      - workflow/commit-filter:
+          target-list: "alpha,master"
+          stop-no-target: true
+      - workflow/call-workflow:
+          org-or-user: "RHEMS-Japan"
+          repo: "blue-mole-deploy"
+          # branch: test
+          param: |
+            { \"${CIRCLE_BRANCH}-blue-mole\": true }
+
   trigger-tag-test:
     docker:
       - image: cimg/base:stable
@@ -90,7 +117,9 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - integration-test-1
+      # - integration-test-1
+      - update-submodules-1
+      - update-submodules-2
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: rhems-japan/workflow
           context: orb-publishing
