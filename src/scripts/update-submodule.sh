@@ -68,7 +68,24 @@ if [ -n ${MODULE_NAME} ]; then
   git commit -a -m "${commit_message}" || true
   echo "push"
   git push -u origin ${CIRCLE_BRANCH}
-  check
+  if [ $? -ne 0 ]; then
+    for i in {2..10};
+    do
+      echo -e "\n<< Retry $i >>\n"
+      sleep 1
+      git pull --no-edit
+      git push -u origin ${CIRCLE_BRANCH}
+      if [ $? -eq 0 ]; then
+        break
+      fi
+    done
+    if [ $i -eq 10 ]; then
+      echo -e "\n tried 10 times, but it failed, so it ends. \n"
+      exit 1
+    fi
+  else
+    echo 'Success'
+  fi
 
 else
   echo "target not found."
