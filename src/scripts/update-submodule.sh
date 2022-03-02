@@ -36,7 +36,6 @@ if [ -n ${MODULE_NAME} ]; then
   export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
   git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
   git pull --no-edit
-  sleep 5
   git commit -a -m "${commit_message}" || true
 
   set +e
