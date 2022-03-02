@@ -67,7 +67,6 @@ if [ -n ${MODULE_NAME} ]; then
   git push -u origin ${CIRCLE_BRANCH}
   RESULT=$?
   echo "RESULT = ${RESULT}"
-  set -e
   if [ $RESULT -ne 0 ]; then
     for i in {2..10};
     do
