@@ -47,7 +47,7 @@ if [ -n ${MODULE_NAME} ]; then
     for i in {2..10};
     do
       echo -e "\n<< Retry $i >>\n"
-      sleep 1
+      sleep 3
       git pull --no-edit
       git push -u origin ${CIRCLE_BRANCH}
       if [ $? -eq 0 ]; then
