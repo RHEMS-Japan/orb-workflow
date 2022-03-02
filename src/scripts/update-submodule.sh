@@ -60,15 +60,15 @@ if [ -n ${MODULE_NAME} ]; then
   _key=$(eval echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
   export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
   git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
-  echo "pull"
   git pull --no-edit
-  echo "sleep"
-  sleep 3
-  echo "commit"
+  sleep 3 # after delete
   git commit -a -m "${commit_message}" || true
-  echo "push"
+  set +e
   git push -u origin ${CIRCLE_BRANCH}
-  if [ $? -ne 0 ]; then
+  RESULT=$?
+  echo "RESULT = ${RESULT}"
+  set -e
+  if [ $RESULT -ne 0 ]; then
     for i in {2..10};
     do
       echo -e "\n<< Retry $i >>\n"
