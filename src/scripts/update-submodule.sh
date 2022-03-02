@@ -1,28 +1,3 @@
-function pull-push() {
-  git pull --no-edit
-  git push -u origin ${CIRCLE_BRANCH}
-}
-
-function check() {
-  if [ $? -ne 0 ]; then
-    for i in {2..10};
-    do
-      echo -e "\n<< Retry $i >>\n"
-      sleep 1
-      pull-push
-      if [ $? -eq 0 ]; then
-        break
-      fi
-    done
-    if [ $i -eq 10 ]; then
-      echo -e "\n tried 10 times, but it failed, so it ends. \n"
-      exit 1
-    fi
-  else
-    echo 'Success'
-  fi
-}
-
 if [ -n ${MODULE_NAME} ]; then
   module_name=$(eval echo ${MODULE_NAME})
   commit_message=$(eval echo ${COMMIT_MESSAGE})
@@ -61,8 +36,8 @@ if [ -n ${MODULE_NAME} ]; then
   export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
   git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
   git pull --no-edit
-  sleep 3 # after delete
   git commit -a -m "${commit_message}" || true
+
   set +e
   git push -u origin ${CIRCLE_BRANCH}
   RESULT=$?
@@ -80,6 +55,7 @@ if [ -n ${MODULE_NAME} ]; then
     done
     if [ $i -eq 10 ]; then
       echo -e "\n tried 10 times, but it failed, so it ends. \n"
+      set -e
       exit 1
     fi
   else
