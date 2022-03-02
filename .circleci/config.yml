@@ -48,9 +48,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      # - run:
-      #     name: sleep
-      #     command: sleep 3
+      - run:
+          name: sleep
+          command: sleep 3
       - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
