@@ -143,8 +143,9 @@ workflows:
           publish-version-tag: false
           requires:
             # - integration-test-1
-            - update-submodules-1
-            - update-submodules-2
+            # - update-submodules-1
+            # - update-submodules-2
+            - update-submodules-3
           filters:
             branches:
               only:
