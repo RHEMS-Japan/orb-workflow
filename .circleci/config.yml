@@ -30,6 +30,9 @@ parameters:
   finger-subm2:
     type: string
     default: 8d:d0:ec:10:8c:ca:a7:14:50:82:87:02:88:4c:c2:15
+  finger-subm-test:
+    type: string
+    default: 4a:bf:f0:af:6f:07:72:36:28:53:7e:85:50:0d:c4:2f
 
 jobs:
   update-submodules-1:
@@ -55,6 +58,17 @@ jobs:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
           master-branch: alpha
+          master-fingerprint: << pipeline.parameters.finger-master >>
+
+  update-submodules-3:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - workflow/update-submodule:
+          organization-name: ichi-01
+          module-name: submodule-test
+          submodule-fingerprint: << pipeline.parameters.finger-subm-test >>
           master-fingerprint: << pipeline.parameters.finger-master >>
 
   integration-test-1:
