@@ -6,3 +6,7 @@
 	path = orbs-workflow-subm-2
 	url = git@github.com:RHEMS-Japan/orbs-workflow-subm-2.git
 	branch = alpha
+[submodule "submodule-test"]
+	path = submodule-test
+	url = git@github.com:ichi-01/submodule-test.git
+	branch = alpha
