@@ -17,15 +17,18 @@ if [[ -n ${ORGANIZATION_NAME} ]]; then
   echo $submodule_url
 fi
 
-# _key=$(eval echo ${SUBM_FINGER_PRINT} | sed -e 's/://g')
-# export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+function use-key() {
+  # $1 : ${SUBM_FINGER_PRINT} or ${MASTER_FINGER_PRINT}
+  _key=$(eval echo $1 | sed -e 's/://g')
+  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+}
+
 git config --global user.email "submodule.updater@rhems-japan.co.jp"
 git config --global user.name "submodule-updater"
 
 git checkout ${CIRCLE_BRANCH}
 function update() {
-  _key=$(eval echo ${SUBM_FINGER_PRINT} | sed -e 's/://g')
-  export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+  use-key ${SUBM_FINGER_PRINT}
   if [ -e ".gitmodules" ]; then
     echo -e "already exists .gitmodule\n"
     paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}'))
@@ -48,8 +51,9 @@ function update() {
 
 update
 
-_key=$(eval echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
+use-key ${MASTER_FINGER_PRINT}
+# _key=$(eval echo ${MASTER_FINGER_PRINT} | sed -e 's/://g')
+# export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}"
 git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
 git pull --no-edit
 git commit -a -m "${commit_message}" || true
@@ -66,6 +70,7 @@ if [ $RESULT -ne 0 ]; then
     git reset --hard HEAD^
     git pull --no-edit
     update
+    use-key ${MASTER_FINGER_PRINT}
     git push -u origin ${CIRCLE_BRANCH}
     if [ $? -eq 0 ]; then
       break
