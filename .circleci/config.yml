@@ -51,9 +51,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-          name: sleep
-          command: sleep 3
+      # - run:
+      #     name: sleep
+      #     command: sleep 3
       - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
@@ -132,8 +132,8 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       # - integration-test-1
-      # - update-submodules-1
-      # - update-submodules-2
+      - update-submodules-1
+      - update-submodules-2
       - update-submodules-3
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: rhems-japan/workflow
@@ -143,8 +143,8 @@ workflows:
           publish-version-tag: false
           requires:
             # - integration-test-1
-            # - update-submodules-1
-            # - update-submodules-2
+            - update-submodules-1
+            - update-submodules-2
             - update-submodules-3
           filters:
             branches:
