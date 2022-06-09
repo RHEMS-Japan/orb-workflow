@@ -48,7 +48,7 @@ export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}
 git branch --set-upstream-to=origin/${CIRCLE_BRANCH} ${CIRCLE_BRANCH}
 git pull --no-edit
 git commit -a -m "${commit_message}" || true
-
+sleep 2
 set +e
 git push -u origin ${CIRCLE_BRANCH}
 RESULT=$?
