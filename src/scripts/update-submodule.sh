@@ -22,24 +22,23 @@ export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_${_key}
 git config --global user.email "submodule.updater@rhems-japan.co.jp"
 git config --global user.name "submodule-updater"
 
-if [ -e ".gitmodules" ]; then
-  echo -e "already exists .gitmodule\n"
-  paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}'))
-  if [[ $paths =~ $module_name ]]; then
-    N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
-    branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
-    echo $branch_name
-  else
-    echo -e "no setting in .gitmodule\n"
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
-  fi
-else
-  echo -e "no exists .gitmodule\n"
-  git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
-fi
-
 git checkout ${CIRCLE_BRANCH}
 function update() {
+  if [ -e ".gitmodules" ]; then
+    echo -e "already exists .gitmodule\n"
+    paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}'))
+    if [[ $paths =~ $module_name ]]; then
+      N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
+      branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
+      echo $branch_name
+    else
+      echo -e "no setting in .gitmodule\n"
+      git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+    fi
+  else
+    echo -e "no exists .gitmodule\n"
+    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+  fi
   git submodule sync
   git submodule update --init --remote --recursive ${module_name}
   git status
