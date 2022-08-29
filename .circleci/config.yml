@@ -57,7 +57,8 @@ jobs:
       - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
-          master-branch: alpha
+          master-branch: beta
+          # master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
 
   update-submodules-3:
