@@ -42,7 +42,7 @@ function update() {
       if [[ $branch_name != $SUBMODULE_BRANCH ]]; then
         echo -e "change branch of submodule\n"
         git submodule deinit ${submodule_url}
-        git rm ${submodule_url}
+        # git rm ${submodule_url}
         git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
       fi
     else
