@@ -38,11 +38,11 @@ function update() {
       echo $branch_name
     else
       echo -e "no setting in .gitmodule\n"
-      git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+      git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
     fi
   else
     echo -e "no exists .gitmodule\n"
-    git submodule add --quiet --force -b ${CIRCLE_BRANCH} ${submodule_url}
+    git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
   fi
   git submodule sync
   git submodule update --init --remote --recursive ${module_name}

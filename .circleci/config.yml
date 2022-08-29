@@ -133,8 +133,8 @@ workflows:
     jobs:
       # - integration-test-1
       - update-submodules-1
-      - update-submodules-2
-      - update-submodules-3
+      # - update-submodules-2
+      # - update-submodules-3
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: rhems-japan/workflow
           context: orb-publishing
@@ -144,8 +144,8 @@ workflows:
           requires:
             # - integration-test-1
             - update-submodules-1
-            - update-submodules-2
-            - update-submodules-3
+            # - update-submodules-2
+            # - update-submodules-3
           filters:
             branches:
               only:
