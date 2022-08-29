@@ -1,3 +1,4 @@
+echo ${SUBMODULE_BRANCH}
 echo ${MODULE_NAME}
 [ -z ${MODULE_NAME} ] && echo "target not found." && exit 1
 
