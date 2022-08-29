@@ -36,7 +36,9 @@ function update() {
     if [[ $paths =~ $module_name ]]; then
       N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
       branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
+      echo "==="
       echo $branch_name
+      echo "==="
     else
       echo -e "no setting in .gitmodule\n"
       git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
