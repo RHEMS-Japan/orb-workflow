@@ -1,8 +1,8 @@
-[submodule "orbs-workflow-subm"]
-	path = orbs-workflow-subm
-	url = git@github.com:RHEMS-Japan/orbs-workflow-subm.git
-	branch = alpha
 [submodule "orbs-workflow-subm-2"]
 	path = orbs-workflow-subm-2
 	url = git@github.com:RHEMS-Japan/orbs-workflow-subm-2.git
+	branch = master
+[submodule "orbs-workflow-subm"]
+	path = orbs-workflow-subm
+	url = git@github.com:RHEMS-Japan/orbs-workflow-subm.git
 	branch = master
