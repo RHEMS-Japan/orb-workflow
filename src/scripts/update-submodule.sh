@@ -39,6 +39,10 @@ function update() {
       echo "==="
       echo $branch_name
       echo "==="
+      if [[ $branch_name != $SUBMODULE_BRANCH ]]; then
+        echo -e "change branch of submodule\n"
+        git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
+      fi
     else
       echo -e "no setting in .gitmodule\n"
       git submodule add --quiet --force -b ${SUBMODULE_BRANCH} ${submodule_url}
