@@ -34,7 +34,7 @@ function update() {
     echo -e "already exists .gitmodule\n"
     paths=$(echo $(grep "path=*" .gitmodules | awk '{print $3}'))
     if [[ $paths =~ $module_name ]]; then
-      N=$(grep -n "path = $module_name" .gitmodules | sed -e 's/:.*//g')
+      N=$(grep -n -e "path = ${module_name}"$ .gitmodules | sed -e 's/:.*//g')
       branch_name=$(awk "NR==$N+2" .gitmodules | awk '{print $3}')
       echo "==="
       echo $branch_name
