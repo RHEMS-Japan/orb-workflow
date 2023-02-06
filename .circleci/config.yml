@@ -125,6 +125,7 @@ workflows:
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
           context: orb-publishing
+          token-variable: CI_TOKEN_TEST
           requires:
             - orb-tools/publish-dev
 
