@@ -1,8 +1,10 @@
 description: >
-  Cancel a workflow
+  Cancel a workflow.
   https://circleci.com/docs/api/v2/index.html#operation/approvePendingApprovalJobById
-# What will this command do?
-# Descriptions should be short, simple, and clear.
+
+  When there are multiple jobs in the workflow, calling this command will cancel the job without proceeding to the next job.
+  Note, however, that subsequent commands within the same job cannot be canceled.
+
 parameters:
   token:
     type: env_var_name
@@ -17,6 +19,7 @@ steps:
 
         if [ -z ${token} ]; then
           echo -e "token is not set. Please see the following document for details.\n >> https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token"
+          echo " >> https://circleci.com/developer/ja/orbs/orb/rhems-japan/workflow"
           exit 1
         fi
         curl --request POST \
