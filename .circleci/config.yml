@@ -43,7 +43,8 @@ jobs:
       - run:
           name: echo 1
           command: echo 1
-      - workflow/stop-this-workflow
+      - workflow/stop-this-workflow:
+          token: CIRCLE_TOKEN
       - run:
           name: echo 2
           command: echo 2
