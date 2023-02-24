@@ -49,6 +49,15 @@ jobs:
           name: echo 2
           command: echo 2
 
+  testjob:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: echo 3
+          command: echo 3
+
   update-submodules-1:
     docker:
       - image: cimg/base:stable
@@ -145,8 +154,12 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - stop-this-workflow-test:
-          context: orb-publishing
+      - stop-this-workflow-test
+      # - stop-this-workflow-test:
+      #     context: orb-publishing
+      - testjob:
+          requires:
+            - stop-this-workflow-test
       # - integration-test-1
       # - update-submodules-1
       # - update-submodules-2
