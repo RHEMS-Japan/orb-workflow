@@ -154,9 +154,8 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - stop-this-workflow-test
-      # - stop-this-workflow-test:
-      #     context: orb-publishing
+      - stop-this-workflow-test:
+          context: orb-publishing
       - testjob:
           requires:
             - stop-this-workflow-test
