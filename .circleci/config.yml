@@ -32,6 +32,29 @@ parameters:
     default: 8d:d0:ec:10:8c:ca:a7:14:50:82:87:02:88:4c:c2:15
 
 jobs:
+  stop-this-workflow-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: echo 1
+          command: echo 1
+      - workflow/stop-this-workflow:
+          token: CIRCLE_TOKEN
+      - run:
+          name: echo 2
+          command: echo 2
+
+  testjob:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: echo 3
+          command: echo 3
+
   update-submodules-1:
     docker:
       - image: cimg/base:stable
@@ -117,9 +140,14 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
+      - stop-this-workflow-test:
+          context: orb-publishing
+      - testjob:
+          requires:
+            - stop-this-workflow-test
       # - integration-test-1
-      - update-submodules-1
-      - update-submodules-2
+      # - update-submodules-1
+      # - update-submodules-2
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: rhems-japan/workflow
           context: orb-publishing
@@ -127,9 +155,10 @@ workflows:
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
+            - stop-this-workflow-test
             # - integration-test-1
-            - update-submodules-1
-            - update-submodules-2
+            # - update-submodules-1
+            # - update-submodules-2
           filters:
             branches:
               only:
