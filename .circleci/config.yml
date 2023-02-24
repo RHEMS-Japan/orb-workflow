@@ -156,8 +156,9 @@ workflows:
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
+            - stop-this-workflow-test
             # - integration-test-1
-            - update-submodules-1
+            # - update-submodules-1
             # - update-submodules-2
             # - update-submodules-3
           filters:
