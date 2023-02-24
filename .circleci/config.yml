@@ -43,7 +43,7 @@ jobs:
       - run:
           name: echo 1
           command: echo 1
-      # - workflow/stop-this-workflow
+      - workflow/stop-this-workflow
       - run:
           name: echo 2
           command: echo 2
