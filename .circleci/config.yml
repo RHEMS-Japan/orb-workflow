@@ -35,6 +35,19 @@ parameters:
     default: 4a:bf:f0:af:6f:07:72:36:28:53:7e:85:50:0d:c4:2f
 
 jobs:
+  stop-this-workflow-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: echo 1
+          command: echo 1
+      # - workflow/stop-this-workflow
+      - run:
+          name: echo 2
+          command: echo 2
+
   update-submodules-1:
     docker:
       - image: cimg/base:stable
@@ -131,8 +144,9 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
+      - stop-this-workflow-test
       # - integration-test-1
-      - update-submodules-1
+      # - update-submodules-1
       # - update-submodules-2
       # - update-submodules-3
       - orb-tools/dev-promote-prod-from-commit-subject:

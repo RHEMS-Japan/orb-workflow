@@ -1,0 +1,20 @@
+description: >
+  Cancel a workflow
+  https://circleci.com/docs/api/v2/index.html#operation/approvePendingApprovalJobById
+# What will this command do?
+# Descriptions should be short, simple, and clear.
+parameters:
+  token:
+    type: env_var_name
+    default: CIRCLE_API_TOKEN
+    description: "CircleCI personal api token. Please refer to the following https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token"
+
+steps:
+  - run:
+      name: trigger workflow
+      command: |
+        token=$(eval echo "$<< parameters.token >>")
+
+        curl --request POST \
+        --url https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel \
+        --header "Circle-Token: ${token}"
