@@ -76,10 +76,10 @@ steps:
         - run:
             name: check config
             command: |
-              if [ -f "~/.ssh/config" ]; then
+              if [ -f ~/.ssh/config ]; then
                 cat ~/.ssh/config
               fi
-              if [ -f "~/ssh/authorized_keys" ]; then
+              if [ -f ~/ssh/authorized_keys ]; then
                 cat ~/ssh/authorized_keys
               fi
         - run:
@@ -93,10 +93,10 @@ steps:
         - run:
             name: check config
             command: |
-              if [ -f "~/.ssh/config" ]; then
+              if [ -f ~/.ssh/config ]; then
                 cat ~/.ssh/config
               fi
-              if [ -f "~/ssh/authorized_keys" ]; then
+              if [ -f ~/ssh/authorized_keys ]; then
                 cat ~/ssh/authorized_keys
               fi
 
@@ -106,10 +106,10 @@ steps:
         - run:
             name: check config
             command: |
-              if [ -f "~/.ssh/config" ]; then
+              if [ -f ~/.ssh/config ]; then
                 cat ~/.ssh/config
               fi
-              if [ -f "~/ssh/authorized_keys" ]; then
+              if [ -f ~/ssh/authorized_keys ]; then
                 cat ~/ssh/authorized_keys
               fi
 
@@ -123,9 +123,9 @@ steps:
         - run:
             name: check config
             command: |
-              if [ -f "~/.ssh/config" ]; then
+              if [ -f ~/.ssh/config ]; then
                 cat ~/.ssh/config
               fi
-              if [ -f "~/ssh/authorized_keys" ]; then
+              if [ -f ~/ssh/authorized_keys ]; then
                 cat ~/ssh/authorized_keys
               fi
