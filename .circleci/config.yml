@@ -134,13 +134,13 @@ jobs:
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
-          # is_ubuntu2204: true
+          is_ubuntu2204: true
       - workflow/update-submodule:
           module-name: orbs-workflow-subm
           submodule-fingerprint: << pipeline.parameters.finger-subm >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
-          # is_ubuntu2204: true
+          is_ubuntu2204: true
 
 workflows:
   test-pack:
