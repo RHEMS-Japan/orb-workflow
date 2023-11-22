@@ -74,6 +74,11 @@ steps:
             fingerprints:
               - << parameters.submodule-fingerprint >>
         - run:
+            name: check config
+            command: |
+              cat ~/.ssh/config
+              cat ~/ssh/authorized_keys
+        - run:
             name: update submodule
             environment:
               ORGANIZATION_NAME: << parameters.organization-name >>
@@ -81,9 +86,19 @@ steps:
               COMMIT_MESSAGE: << parameters.commit-message >>
               SUBM_FINGER_PRINT: << parameters.submodule-fingerprint >>
             command: << include(scripts/update-submodule-22.sh) >>
+        - run:
+            name: check config
+            command: |
+              cat ~/.ssh/config
+              cat ~/ssh/authorized_keys
         - add_ssh_keys:
             fingerprints:
               - << parameters.master-fingerprint >>
+        - run:
+            name: check config
+            command: |
+              cat ~/.ssh/config
+              cat ~/ssh/authorized_keys
         - run:
             name: git push
             environment:
@@ -91,3 +106,8 @@ steps:
               COMMIT_MESSAGE: << parameters.commit-message >>
               MASTER_FINGER_PRINT: << parameters.master-fingerprint >>
             command: << include(scripts/git-push-for-master-22.sh) >>
+        - run:
+            name: check config
+            command: |
+              cat ~/.ssh/config
+              cat ~/ssh/authorized_keys
