@@ -2,6 +2,12 @@ echo "==============================================================="
 echo "============== This command is for ubuntu22.04. ==============="
 echo "===============================================================" 
 
+echo "check ssh config ----------------------------------------------"
+if [ -f ~/.ssh/config ]; then
+  cat ~/.ssh/config
+fi
+echo "---------------------------------------------------------------"
+
 function use-key() {
   # $1 : ${MASTER_FINGER_PRINT}
   _key=$(eval echo $1 | sed -e 's/://g')
@@ -37,4 +43,3 @@ fi
 
 # reset config
 rm -rf ~/.ssh/config
-sleep 1

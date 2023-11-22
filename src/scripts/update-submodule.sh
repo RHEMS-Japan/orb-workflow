@@ -1,3 +1,9 @@
+echo "check ssh config ----------------------------------------------"
+if [ -f ~/.ssh/config ]; then
+  cat ~/.ssh/config
+fi
+echo "---------------------------------------------------------------"
+
 echo ${SUBMODULE_BRANCH}
 echo ${MODULE_NAME}
 [ -z ${MODULE_NAME} ] && echo "target not found." && exit 1
