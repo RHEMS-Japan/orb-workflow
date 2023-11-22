@@ -130,13 +130,13 @@ jobs:
     steps:
       - checkout
       - workflow/update-submodule:
-          module-name: orbs-workflow-subm
-          submodule-fingerprint: << pipeline.parameters.finger-subm >>
-          master-branch: beta
-          master-fingerprint: << pipeline.parameters.finger-master >>
-      - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
+          master-branch: alpha
+          master-fingerprint: << pipeline.parameters.finger-master >>
+      - workflow/update-submodule:
+          module-name: orbs-workflow-subm
+          submodule-fingerprint: << pipeline.parameters.finger-subm >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
 
