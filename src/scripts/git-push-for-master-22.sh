@@ -23,7 +23,11 @@ set +e
 git push -u origin ${CIRCLE_BRANCH}
 RESULT=$?
 echo "RESULT = ${RESULT}"
-if [ $RESULT -ne 0 ]; then
+if [ $RESULT -eq 128 ]; then
+  echo 'Please make sure you have the correct access rights and the repository exists.'
+  set -e
+  exit 1
+elif [ $RESULT -ne 0 ]; then
   echo "Failed. The git push could not be completed successfully due to the timing. Please try again."
   set -e
   exit 1
