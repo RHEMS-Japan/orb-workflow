@@ -123,6 +123,21 @@ jobs:
           # orbs-workflow
           master-fingerprint: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
 
+  update-submodules-for-ubuntu22:
+    docker:
+      - image: cimg/php:8.1.25-browsers
+    steps:
+      - checkout
+      - workflow/update-submodule:
+          module-name: orbs-workflow-subm
+          submodule-fingerprint: << pipeline.parameters.finger-subm >>
+          master-branch: beta
+          master-fingerprint: << pipeline.parameters.finger-master >>
+      - workflow/update-submodule:
+          module-name: orbs-workflow-subm-2
+          submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
+          master-branch: alpha
+          master-fingerprint: << pipeline.parameters.finger-master >>
 
 workflows:
   test-pack:
@@ -154,11 +169,12 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - stop-this-workflow-test:
-          context: orb-publishing
-      - testjob:
-          requires:
-            - stop-this-workflow-test
+      - update-submodules-for-ubuntu22
+      # - stop-this-workflow-test:
+      #     context: orb-publishing
+      # - testjob:
+      #     requires:
+      #       - stop-this-workflow-test
       # - integration-test-1
       # - update-submodules-1
       # - update-submodules-2
@@ -170,7 +186,8 @@ workflows:
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
-            - stop-this-workflow-test
+            - update-submodules-for-ubuntu22
+            # - stop-this-workflow-test
             # - integration-test-1
             # - update-submodules-1
             # - update-submodules-2
