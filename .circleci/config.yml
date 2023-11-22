@@ -126,9 +126,9 @@ jobs:
 
   update-submodules-for-ubuntu22:
     docker:
-      - image: cimg/php:8.1.25-browsers
+      # - image: cimg/php:8.1.25-browsers
       # - image: cimg/base:stable
-      # - image: cimg/base:current
+      - image: cimg/base:current
     steps:
       - checkout
       - workflow/update-submodule:
@@ -142,7 +142,7 @@ jobs:
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
-          # is_ubuntu2204: true
+          is_ubuntu2204: true
       - workflow/update-submodule:
           organization-name: ichi-01
           module-name: submodule-test
