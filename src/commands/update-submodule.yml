@@ -83,7 +83,7 @@ steps:
             command: << include(scripts/update-submodule-22.sh) >>
         - add_ssh_keys:
             fingerprints:
-              - << parameters.submodule-fingerprint >>
+              - << parameters.master-fingerprint >>
         - run:
             name: git push
             environment:

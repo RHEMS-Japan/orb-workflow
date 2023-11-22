@@ -25,6 +25,8 @@ RESULT=$?
 echo "RESULT = ${RESULT}"
 if [ $RESULT -ne 0 ]; then
   echo "Failed. The git push could not be completed successfully due to the timing. Please try again."
+  set -e
+  exit 1
 else
   echo 'Success'
 fi
