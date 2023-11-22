@@ -30,3 +30,7 @@ if [ $RESULT -ne 0 ]; then
 else
   echo 'Success'
 fi
+
+# reset config
+rm -rf ~/.git/config
+sleep 1
