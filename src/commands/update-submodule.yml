@@ -29,7 +29,10 @@ steps:
   - run:
       name: confirm
       command: echo << parameters.module-name >>
-  - add_ssh_keys
+  - add_ssh_keys:
+      fingerprints:
+        - << parameters.master-fingerprint >>
+        - << parameters.submodule-fingerprint >>
   - run:
       name: check branch name
       command: |
@@ -51,3 +54,8 @@ steps:
         MASTER_FINGER_PRINT: << parameters.master-fingerprint >>
         SUBM_FINGER_PRINT: << parameters.submodule-fingerprint >>
       command: << include(scripts/update-submodule.sh) >>
+  - run:
+      name: reset ssh config
+      command: |
+        rm -f ~/.ssh/config
+
