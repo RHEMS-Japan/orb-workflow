@@ -143,12 +143,6 @@ jobs:
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
           is_ubuntu2204: true
-      - workflow/update-submodule:
-          organization-name: ichi-01
-          module-name: submodule-test
-          submodule-fingerprint: << pipeline.parameters.finger-subm-test >>
-          master-fingerprint: << pipeline.parameters.finger-master >>
-          is_ubuntu2204: true
 
 workflows:
   test-pack:
