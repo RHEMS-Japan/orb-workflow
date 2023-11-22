@@ -45,11 +45,11 @@ steps:
           echo "export CIRCLE_BRANCH=${_branch}" >> $BASH_ENV
         fi
         echo "export SUBMODULE_BRANCH=${_branch}" >> $BASH_ENV
-  - when:
+  - unless:
       condition:
         and:
           - << parameters.is_ubuntu2204 >>
-          - false
+          - true
       steps:
         - add_ssh_keys:
             fingerprints:
