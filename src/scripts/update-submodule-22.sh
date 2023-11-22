@@ -61,3 +61,4 @@ update
 
 # reset config
 rm -rf ~/.git/config
+sleep 1
