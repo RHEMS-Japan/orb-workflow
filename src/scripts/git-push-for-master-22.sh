@@ -36,5 +36,5 @@ else
 fi
 
 # reset config
-rm -rf ~/.git/config
+rm -rf ~/.ssh/config
 sleep 1
