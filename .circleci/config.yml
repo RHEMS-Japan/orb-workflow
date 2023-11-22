@@ -26,8 +26,8 @@ parameters:
     default: d9:c7:15:84:5c:3c:86:5f:f5:ca:46:18:fd:7f:81:ce
   finger-subm:
     type: string
-    default: 77:d5:82:dc:f0:7d:17:17:02:b9:2c:93:3d:a5:02:70
-    # default: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+    default: 89:9b:ce:5b:89:61:a8:4e:be:36:a8:45:63:f5:8f:2d
+    # default: 77:d5:82:dc:f0:7d:17:17:02:b9:2c:93:3d:a5:02:70 #new
   finger-subm2:
     type: string
     default: 79:0f:9b:8d:0a:b9:b7:27:bf:d5:44:de:71:fe:85:b2
@@ -127,18 +127,19 @@ jobs:
   update-submodules-for-ubuntu22:
     docker:
       # - image: cimg/php:8.1.25-browsers
-      - image: cimg/base:stable
+      # - image: cimg/base:stable
+      - image: cimg/base:current
     steps:
       - checkout
       - workflow/update-submodule:
-          module-name: orbs-workflow-subm-2
-          submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
+          module-name: orbs-workflow-subm
+          submodule-fingerprint: << pipeline.parameters.finger-subm >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
           is_ubuntu2204: true
       - workflow/update-submodule:
-          module-name: orbs-workflow-subm
-          submodule-fingerprint: << pipeline.parameters.finger-subm >>
+          module-name: orbs-workflow-subm-2
+          submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
           is_ubuntu2204: true
