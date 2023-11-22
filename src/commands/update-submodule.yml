@@ -76,8 +76,12 @@ steps:
         - run:
             name: check config
             command: |
-              cat ~/.ssh/config
-              cat ~/ssh/authorized_keys
+              if [ -f "~/.ssh/config" ]; then
+                cat ~/.ssh/config
+              fi
+              if [ -f "~/ssh/authorized_keys" ]; then
+                cat ~/ssh/authorized_keys
+              fi
         - run:
             name: update submodule
             environment:
@@ -89,16 +93,26 @@ steps:
         - run:
             name: check config
             command: |
-              cat ~/.ssh/config
-              cat ~/ssh/authorized_keys
+              if [ -f "~/.ssh/config" ]; then
+                cat ~/.ssh/config
+              fi
+              if [ -f "~/ssh/authorized_keys" ]; then
+                cat ~/ssh/authorized_keys
+              fi
+
         - add_ssh_keys:
             fingerprints:
               - << parameters.master-fingerprint >>
         - run:
             name: check config
             command: |
-              cat ~/.ssh/config
-              cat ~/ssh/authorized_keys
+              if [ -f "~/.ssh/config" ]; then
+                cat ~/.ssh/config
+              fi
+              if [ -f "~/ssh/authorized_keys" ]; then
+                cat ~/ssh/authorized_keys
+              fi
+
         - run:
             name: git push
             environment:
@@ -109,5 +123,9 @@ steps:
         - run:
             name: check config
             command: |
-              cat ~/.ssh/config
-              cat ~/ssh/authorized_keys
+              if [ -f "~/.ssh/config" ]; then
+                cat ~/.ssh/config
+              fi
+              if [ -f "~/ssh/authorized_keys" ]; then
+                cat ~/ssh/authorized_keys
+              fi
