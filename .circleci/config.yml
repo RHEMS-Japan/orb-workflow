@@ -136,13 +136,13 @@ jobs:
           submodule-fingerprint: << pipeline.parameters.finger-subm >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
-          is_ubuntu2204: true
+          is_reset_ssh_config: true
       - workflow/update-submodule:
           module-name: orbs-workflow-subm-2
           submodule-fingerprint: << pipeline.parameters.finger-subm2 >>
           master-branch: alpha
           master-fingerprint: << pipeline.parameters.finger-master >>
-          is_ubuntu2204: true
+          is_reset_ssh_config: true
       # - workflow/update-submodule:
       #     organization-name: ichi-01
       #     module-name: submodule-test
